@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
+	"github.com/vikas-gautam/hotel-booking-app/pkg/models"
 	"github.com/vikas-gautam/hotel-booking-app/pkg/render"
 )
 
@@ -24,9 +25,16 @@ func NewHandlers(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.html")
+	render.RenderTemplate(w, "home.page.html", &models.TemplateData{})
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "about.page.html")
+	//perform some logic
+	stringMap := make(map[string]string)
+	stringMap["test"] = "Hello, again."
+
+	//send the data to the template
+	render.RenderTemplate(w, "about.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }

@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
+	"github.com/vikas-gautam/hotel-booking-app/pkg/models"
 )
 
 //render template advance
@@ -20,7 +21,13 @@ func NewTemplate(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+// AddDefaultData to add default data from template in all html files
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+
+}
+
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 
 	var tc map[string]*template.Template
 
@@ -38,7 +45,8 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
 	buf := new(bytes.Buffer)
 
-	err := t.Execute(buf, nil)
+	td = AddDefaultData(td)
+	err := t.Execute(buf, td)
 	if err != nil {
 		log.Println(err)
 	}
