@@ -7,6 +7,15 @@
                 <p>this is about  text</p>
                 <p>this is second line and should reflect when cache is off</p>
                 <p>This came from template {{index .StringMap "test"}}</p>
+
+                <p> 
+                    {{ if ne (index .StringMap "remote_ip") ""}}
+                        your  remote IP address {{index .StringMap "remote_ip"}}
+                    {{else}}
+                        I don't know your ip address yet. Visit the <a href="/">Home Page</a> so i can set it.
+                    {{end}}
+                </p>
+
             </div>
         </div>
     </div>
