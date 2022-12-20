@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
@@ -76,6 +78,30 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 
 	// w.Write([]byte(fmt.Srintf("The start date is %s and end date is %s", start, end)))
 	w.Write([]byte("searching for availability"))
+}
+
+type jsonResponse struct {
+	OK bool          `json:"ok"`
+	Message string	 `json:"message"`
+}
+
+// PostAvailabilityJSON send the json response to search availability page
+func (m *Repository) PostAvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+
+	resp := jsonResponse{
+		OK: true,
+		Message: "Available", 
+	}
+
+	out, err := json.MarshalIndent(resp, "", "    ")
+	if err != nil{
+		log.Print(err)
+	}
+
+	log.Println(string(out))
+	w.Header().Set("Content-Type", "application/json")
+
+	w.Write(out)
 }
 
 // Contact renders the contact page
