@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/handlers"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/render"
+	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/handlers"
+	"github.com/vikas-gautam/hotel-booking-app/internal/render"
 )
 
 const portNumber = ":7070"

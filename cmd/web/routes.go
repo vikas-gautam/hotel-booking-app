@@ -5,8 +5,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/handlers"
+	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/handlers"
 )
 
 func routes(app *config.AppConfig) http.Handler {
@@ -22,7 +22,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/majors-suite", handlers.Repo.Majors)
 	mux.Get("/search-availability", handlers.Repo.Availability)
 	mux.Post("/search-availability", handlers.Repo.PostAvailability)
-	mux.Get("/search-availability-json", handlers.Repo.PostAvailabilityJSON)
+	mux.Post("/search-availability-json", handlers.Repo.PostAvailabilityJSON)
 	mux.Get("/contact", handlers.Repo.Contact)
 	mux.Get("/make-reservation", handlers.Repo.Reservation)
 

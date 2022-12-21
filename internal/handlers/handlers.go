@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/models"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/render"
+	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/models"
+	"github.com/vikas-gautam/hotel-booking-app/internal/render"
 )
 
 // Repo the repository used by the handlers
@@ -81,20 +81,20 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 }
 
 type jsonResponse struct {
-	OK bool          `json:"ok"`
-	Message string	 `json:"message"`
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
 }
 
 // PostAvailabilityJSON send the json response to search availability page
 func (m *Repository) PostAvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 	resp := jsonResponse{
-		OK: true,
-		Message: "Available", 
+		OK:      true,
+		Message: "Available",
 	}
 
 	out, err := json.MarshalIndent(resp, "", "    ")
-	if err != nil{
+	if err != nil {
 		log.Print(err)
 	}
 

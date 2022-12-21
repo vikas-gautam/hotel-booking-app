@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 
 	"github.com/justinas/nosurf"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/config"
-	"github.com/vikas-gautam/hotel-booking-app/pkg/models"
+	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/models"
 )
 
 //render template advance
