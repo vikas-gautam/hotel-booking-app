@@ -12,6 +12,7 @@ import (
 )
 
 const portNumber = ":7070"
+
 var app config.AppConfig
 var session *scs.SessionManager
 
@@ -32,7 +33,7 @@ func main() {
 	}
 	app.TemplateCache = tc
 
-	app.UseCache = true
+	app.UseCache = false
 	render.NewTemplate(&app)
 
 	repo := handlers.NewRepo(&app)
