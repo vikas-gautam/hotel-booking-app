@@ -70,6 +70,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	// get all of the files named *.page.tmpl from ./templates
 	pages, err := filepath.Glob("./templates/*.page.html")
+	fmt.Println(pages)
 	if err != nil {
 		return myCache, err
 	}

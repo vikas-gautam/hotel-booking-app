@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/gob"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -51,6 +52,7 @@ func run() error {
 	app.Session = session
 
 	tc, err := render.CreateTemplateCache()
+	fmt.Printf("checking template cache %v\n", tc)
 	if err != nil {
 		log.Fatal("cannot create template cache")
 		return err
