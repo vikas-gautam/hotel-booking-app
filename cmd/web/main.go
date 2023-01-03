@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/vikas-gautam/hotel-booking-app/internal/config"
 	"github.com/vikas-gautam/hotel-booking-app/internal/handlers"
+	"github.com/vikas-gautam/hotel-booking-app/internal/helpers"
 	"github.com/vikas-gautam/hotel-booking-app/internal/models"
 	"github.com/vikas-gautam/hotel-booking-app/internal/render"
 )
@@ -18,6 +20,8 @@ const portNumber = ":7070"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 func main() {
 
@@ -59,11 +63,18 @@ func run() error {
 	}
 	app.TemplateCache = tc
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	app.UseCache = false
 	render.NewTemplate(&app)
 
 	repo := handlers.NewRepo(&app)
 	handlers.NewHandlers(repo)
+	helpers.NewHelpers(&app)
 
 	return nil
 }

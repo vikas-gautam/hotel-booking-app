@@ -5,6 +5,7 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"github.com/vikas-gautam/hotel-booking-app/internal/helpers"
 )
 
 type postData struct {

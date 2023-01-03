@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 
 	"github.com/vikas-gautam/hotel-booking-app/internal/config"
 	"github.com/vikas-gautam/hotel-booking-app/internal/forms"
+	"github.com/vikas-gautam/hotel-booking-app/internal/helpers"
 	"github.com/vikas-gautam/hotel-booking-app/internal/models"
 	"github.com/vikas-gautam/hotel-booking-app/internal/render"
 )
@@ -33,8 +35,6 @@ func NewHandlers(r *Repository) {
 
 // Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	remoteIP := r.RemoteAddr
-	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
 	render.RenderTemplate(w, r, "home.page.html", &models.TemplateData{})
 }
@@ -44,9 +44,6 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	// perform some logic
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, again"
-
-	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
-	stringMap["remote_ip"] = remoteIP
 
 	// send data to the template
 	render.RenderTemplate(w, r, "about.page.html", &models.TemplateData{
@@ -69,8 +66,10 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 // PostReservation handles the posting of form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
+	err = errors.New("this is intentionally generated error")
 	if err != nil {
-		log.Println(err)
+		// log.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 
