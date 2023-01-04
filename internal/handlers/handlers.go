@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"errors"
 	"log"
 	"net/http"
 
@@ -66,7 +65,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 // PostReservation handles the posting of form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
-	err = errors.New("this is intentionally generated error")
+	// err = errors.New("this is intentionally generated error")
 	if err != nil {
 		// log.Println(err)
 		helpers.ServerError(w, err)
