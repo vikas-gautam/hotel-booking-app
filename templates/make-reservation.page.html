@@ -31,6 +31,17 @@
                                name='last_name' value="{{$res.LastName}}" required>
                     </div>
 
+                    
+                    <div class="form-group">
+                        <label for="start_date">Start date</label>
+                        <input id="start_date" type='text' name='start_date' class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="end_date">Start date</label>
+                        <input id="end_date" type='text' name='end_date' class="form-control">
+                    </div>
+
                     <div class="form-group">
                         <label for="email">Email:</label>
                         {{with .Form.Errors.Get "email"}}

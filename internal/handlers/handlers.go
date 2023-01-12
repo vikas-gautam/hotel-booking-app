@@ -4,12 +4,17 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/driver"
 	"github.com/vikas-gautam/hotel-booking-app/internal/forms"
 	"github.com/vikas-gautam/hotel-booking-app/internal/helpers"
 	"github.com/vikas-gautam/hotel-booking-app/internal/models"
 	"github.com/vikas-gautam/hotel-booking-app/internal/render"
+	"github.com/vikas-gautam/hotel-booking-app/internal/repository"
+	"github.com/vikas-gautam/hotel-booking-app/internal/repository/dbrepo"
 )
 
 // Repo the repository used by the handlers
@@ -18,12 +23,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
@@ -72,11 +79,34 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	sd := r.Form.Get("start_date")
+	ed := r.Form.Get("end_date")
+
+	// 2020-01-01 -- 01/02
+
+	layout := "2006-01-02"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Phone:     r.Form.Get("phone"),
 		Email:     r.Form.Get("email"),
+		StartDate: startDate,
+		EndDate:   endDate,
+		RoomID:    roomID,
 	}
 
 	form := forms.New(r.PostForm)
@@ -96,6 +126,11 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 			Data: data,
 		})
 		return
+	}
+
+	err = m.DB.InsertReservation(reservation)
+	if err != nil {
+		log.Printf("Error is %s", err)
 	}
 
 	m.App.Session.Put(r.Context(), "reservation", reservation)

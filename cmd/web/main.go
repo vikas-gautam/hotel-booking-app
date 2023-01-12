@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/driver"
 	"github.com/vikas-gautam/hotel-booking-app/internal/handlers"
 	"github.com/vikas-gautam/hotel-booking-app/internal/helpers"
 	"github.com/vikas-gautam/hotel-booking-app/internal/models"
@@ -25,10 +26,12 @@ var errorLog *log.Logger
 
 func main() {
 
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer db.SQL.Close()
 
 	log.Printf("Starting server on port: %s", portNumber)
 
@@ -42,9 +45,12 @@ func main() {
 }
 
 // to make main testable
-func run() error {
+func run() (*driver.DB, error) {
 
 	gob.Register(models.Reservation{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
+	gob.Register(models.RoomRestriction{})
 
 	app.InProduction = false
 	session = scs.New()
@@ -55,11 +61,20 @@ func run() error {
 
 	app.Session = session
 
+	//connect to database
+	log.Println("Connecting to database")
+	db, err := driver.ConnectSQL("host=127.0.0.1 port=5432 dbname=test_connect user=postgres password=password")
+	if err != nil {
+		log.Fatal("Can't connect to database")
+	}
+
+	log.Println("Connected to database")
+
 	tc, err := render.CreateTemplateCache()
 	fmt.Printf("checking template cache %v\n", tc)
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 	app.TemplateCache = tc
 
@@ -72,9 +87,9 @@ func run() error {
 	app.UseCache = false
 	render.NewTemplate(&app)
 
-	repo := handlers.NewRepo(&app)
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }
