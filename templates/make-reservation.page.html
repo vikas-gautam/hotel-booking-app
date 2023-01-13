@@ -42,6 +42,8 @@
                         <input id="end_date" type='text' name='end_date' class="form-control">
                     </div>
 
+                    <input id="room_id" type="hidden" name="room_id" value="1">
+
                     <div class="form-group">
                         <label for="email">Email:</label>
                         {{with .Form.Errors.Get "email"}}
