@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -169,8 +170,30 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 // PostAvailability handles the post  availability page
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 
-	// w.Write([]byte(fmt.Srintf("The start date is %s and end date is %s", start, end)))
-	w.Write([]byte("searching for availability"))
+	start := r.Form.Get("start")
+	end := r.Form.Get("end")
+
+	layout := "2006-01-02"
+	startDate, err := time.Parse(layout, end)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	endDate, err := time.Parse(layout, end)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	rooms, err := m.DB.SearchAvailabilityForAllRooms(startDate, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	for _, room := range rooms {
+		fmt.Printf("Room Name: %s and Room ID is %v\n", room.RoomName, room.ID)
+	}
+
+	w.Write([]byte(fmt.Sprintf("start_date is %s and end_date is %s", start, end)))
 }
 
 type jsonResponse struct {
