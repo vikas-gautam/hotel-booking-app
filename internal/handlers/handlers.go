@@ -189,6 +189,14 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 	}
 
+	fmt.Printf("rooms after searching rooms availbility %v: ", rooms)
+
+	if len(rooms) == 0 {
+		m.App.Session.Put(r.Context(), "error", "no availability")
+		http.Redirect(w, r, "/search-availability", http.StatusSeeOther)
+		return
+	}
+
 	for _, room := range rooms {
 		fmt.Printf("Room Name: %s and Room ID is %v\n", room.RoomName, room.ID)
 	}
