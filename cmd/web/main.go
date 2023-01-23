@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/gob"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -71,7 +70,7 @@ func run() (*driver.DB, error) {
 	log.Println("Connected to database")
 
 	tc, err := render.CreateTemplateCache()
-	fmt.Printf("checking template cache %v\n", tc)
+	// fmt.Printf("checking template cache %v\n", tc)
 	if err != nil {
 		log.Fatal("cannot create template cache")
 		return nil, err
