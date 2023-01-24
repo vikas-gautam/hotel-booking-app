@@ -67,6 +67,15 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, errors.New("can't get the reservation data from session"))
 	}
 
+	room, err := m.DB.GetRoomByID(res.RoomID)
+	if err != nil {
+		return
+	}
+
+	res.Room.RoomName = room.RoomName
+
+	m.App.Session.Put(r.Context(), "reservation", res)
+
 	// var emptyReservation models.Reservation
 	data := make(map[string]interface{})
 	data["reservation"] = res
@@ -80,8 +89,8 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	stringMap["end_date"] = ed
 
 	render.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
-		Form: forms.New(nil),
-		Data: data,
+		Form:      forms.New(nil),
+		Data:      data,
 		StringMap: stringMap,
 	})
 }
