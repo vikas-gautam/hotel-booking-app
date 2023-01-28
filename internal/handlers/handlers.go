@@ -358,6 +358,7 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	res.RoomID = roomID
 	res.StartDate = startDate
 	res.EndDate = endDate
+
 	room, err := m.DB.GetRoomByID(res.RoomID)
 	if err != nil {
 		return
