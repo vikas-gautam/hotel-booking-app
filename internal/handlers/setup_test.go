@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/justinas/nosurf"
 	"github.com/vikas-gautam/hotel-booking-app/internal/config"
+	"github.com/vikas-gautam/hotel-booking-app/internal/driver"
 	"github.com/vikas-gautam/hotel-booking-app/internal/models"
 	"github.com/vikas-gautam/hotel-booking-app/internal/render"
 )
@@ -54,7 +55,7 @@ func getRoutes() http.Handler {
 	app.TemplateCache = tc
 	app.UseCache = true
 
-	repo := NewRepo(&app)
+	repo := NewRepo(&app, &driver.DB{})
 	NewHandlers(repo)
 
 	render.NewTemplate(&app)
