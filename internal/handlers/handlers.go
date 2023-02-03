@@ -431,3 +431,8 @@ func (m *Repository) ShowLogin(w http.ResponseWriter, r *http.Request) {
 	})
 
 }
+
+func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("it works....!!!")
+
+}
