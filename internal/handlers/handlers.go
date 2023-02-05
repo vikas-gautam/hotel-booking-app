@@ -466,7 +466,7 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-//Logout logs a user out
+// Logout logs a user out
 func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = m.App.Session.Destroy(r.Context())
 	_ = m.App.Session.RenewToken(r.Context())
@@ -481,10 +481,20 @@ func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request
 	render.RenderTemplate(w, r, "admin-reservations-new.page.html", &models.TemplateData{})
 }
 
-func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "admin-reservations-all.page.html", &models.TemplateData{})
-}
-
 func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "admin-reservations-calendar.page.html", &models.TemplateData{})
+}
+
+func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
+	reservations, err := m.DB.AllReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	data := make(map[string]interface{})
+	data["reservations"] = reservations
+
+	render.RenderTemplate(w, r, "admin-reservations-all.page.html", &models.TemplateData{
+		Data: data,
+	})
 }
