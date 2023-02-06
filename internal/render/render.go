@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/justinas/nosurf"
 	"github.com/vikas-gautam/hotel-booking-app/internal/config"
@@ -18,11 +19,19 @@ import (
 
 var app *config.AppConfig
 
+var functions = template.FuncMap{
+	"humanDate": HumanDate,
+}
+
 var pathToTemplates = "./templates"
 
 func NewTemplate(a *config.AppConfig) {
 	fmt.Println("executing newTemplate function")
 	app = a
+}
+
+func HumanDate(t time.Time) string {
+	return t.Format("2006-01-02")
 }
 
 // AddDefaultData to add default data from template in all html files
@@ -31,7 +40,7 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.CSRFToken = nosurf.Token(r)
-	if app.Session.Exists(r.Context(), "user_id"){
+	if app.Session.Exists(r.Context(), "user_id") {
 		td.IsAuthenticated = 1
 	}
 	return td
@@ -85,7 +94,7 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 	// range through all files ending with *.page.tmpl
 	for _, page := range pages {
 		name := filepath.Base(page)
-		ts, err := template.New(name).ParseFiles(page)
+		ts, err := template.New(name).Funcs(functions).ParseFiles(page)
 		if err != nil {
 			return myCache, err
 		}
