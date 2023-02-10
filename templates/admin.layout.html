@@ -10,6 +10,8 @@
         <!-- plugins:css -->
         <link rel="stylesheet" href="/static/admin/vendors/ti-icons/css/themify-icons.css">
         <link rel="stylesheet" href="/static/admin/vendors/base/vendor.bundle.base.css">
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
         <!-- endinject -->
         <!-- plugin css for this page -->
         <!-- End plugin css for this page -->
@@ -21,6 +23,9 @@
         <style>
             .content-wrapper{
                 background: white;
+            }
+            label{
+                font-weight: bold;
             }
         </style>
         
@@ -139,8 +144,43 @@
     <script src="/static/admin/js/todolist.js"></script>
     <!-- endinject -->
     <!-- Custom js for this page-->
+    <script src="https://unpkg.com/notie"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
     <script src="/static/admin/js/dashboard.js"></script>
     <!-- End custom js for this page-->
+
+    <script>
+        let attention = Prompt();
+        function notify(msg, msgType) {
+            notie.alert({
+                type: msgType,
+                text: msg,
+            })
+        }
+
+        function notifyModal(title, text, icon, confirmationButtonText) {
+            Swal.fire({
+                title: title,
+                html: text,
+                icon: icon,
+                confirmButtonText: confirmationButtonText
+            })
+        }
+
+        {{with .Error}}
+            notify("{{.}}", "error");
+        {{end}}
+
+        {{with .Flash}}
+        notify("{{.}}", "success");
+        {{end}}
+
+        {{with .Warning}}
+        notify("{{.}}", "warning");
+        {{end}}
+    </script>
+
+    
 
     {{block "js" . }}
 
