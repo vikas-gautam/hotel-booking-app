@@ -81,7 +81,7 @@ func run() (*driver.DB, error) {
 	tc, err := render.CreateTemplateCache()
 	// fmt.Printf("checking template cache %v\n", tc)
 	if err != nil {
-		log.Fatal("cannot create template cache")
+		log.Fatal("cannot create template cache from main")
 		return nil, err
 	}
 	app.TemplateCache = tc

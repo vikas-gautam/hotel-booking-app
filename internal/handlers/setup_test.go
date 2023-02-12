@@ -49,7 +49,7 @@ func getRoutes() http.Handler {
 
 	tc, err := CreateTestTemplateCache()
 	if err != nil {
-		log.Fatal("cannot create template cache")
+		log.Fatal("cannot create template cache from setup_test.go")
 	}
 
 	app.TemplateCache = tc
