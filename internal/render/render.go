@@ -20,7 +20,10 @@ import (
 var app *config.AppConfig
 
 var functions = template.FuncMap{
-	"humanDate": HumanDate,
+	"humanDate":  HumanDate,
+	"formatDate": FormatDate,
+	"iterate":    Iterate,
+	"add":        Add,
 }
 
 var pathToTemplates = "./templates"
@@ -30,8 +33,25 @@ func NewTemplate(a *config.AppConfig) {
 	app = a
 }
 
+func Add(a, b int) int {
+	return a + b
+}
+
+func Iterate(count int) []int {
+	var i int
+	var items []int
+	for i = 0; i < count; i++ {
+		items = append(items, i)
+	}
+	return items
+}
+
 func HumanDate(t time.Time) string {
 	return t.Format("2006-01-02")
+}
+
+func FormatDate(t time.Time, f string) string {
+	return t.Format(f)
 }
 
 // AddDefaultData to add default data from template in all html files
