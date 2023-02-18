@@ -23,7 +23,7 @@ pre {
 
 code {
   padding: 5px;
-  color: $danger;
+  color: theme-color(danger);
   font-family: $type;
   font-weight: 300;
   font-size: $default-font-size;

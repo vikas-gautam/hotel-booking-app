@@ -9,14 +9,15 @@
     {{$src := index .StringMap "src"}}
     <div class="col-md-12">
         <p>
-            <strong>Arrival</strong> {{humanDate $res.StartDate}}<br>
-            <strong>Departure</strong> {{humanDate $res.EndDate}}<br>
-            <strong>Room</strong> {{$res.Room.RoomName}}<br>
+            <strong>Arrival:</strong> {{humanDate $res.StartDate}}<br>
+            <strong>Departure:</strong> {{humanDate $res.EndDate}}<br>
+            <strong>Room:</strong> {{$res.Room.RoomName}}<br>
         </p>
-        <form method="post" action="/admin/reservations/{{$src}}/{{$res.ID}}" class="" novalidate>
+
+        <form action="/admin/reservations/{{$src}}/{{$res.ID}}" method="post" class="" novalidate>
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
-
-
+            <input type="hidden" name="year" value="{{index .StringMap "year"}}">
+            <input type="hidden" name="month" value="{{index .StringMap "month"}}">
 
             <div class="form-group mt-3">
                 <label for="first_name">First Name:</label>
@@ -37,9 +38,6 @@
                        id="last_name" autocomplete="off" type='text'
                        name='last_name' value="{{$res.LastName}}" required>
             </div>
-
-
-            <input id="room_id" type="hidden" name="room_id" value="1">
 
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -62,16 +60,21 @@
             </div>
 
             <hr>
-            <div class="left" style="float: left;">
+            <div class="float-left">
                 <input type="submit" class="btn btn-primary" value="Save">
-                <a href="/admin/reservations-{{$src}}"  class="btn btn-warning"> Cancel </a>
-                <a href="#!" class="btn btn-info" onclick="processRes({{$res.ID}})"> Mark as Processed</a>
+                {{if eq $src "cal"}}
+                    <a href="#!" onclick="window.history.go(-1)" class="btn btn-warning">Cancel</a>
+                {{else}}
+                    <a href="/admin/reservations-{{$src}}" class="btn btn-warning">Cancel</a>
+                {{end}}
+                {{if eq $res.Processed 0}}
+                    <a href="#!" class="btn btn-info" onclick="processRes({{$res.ID}})">Mark as Processed</a>
+                {{end}}
             </div>
 
-            <div class="right" style="float: right;">
-                <a href="#!" class="btn btn-danger" onclick="deleteRes({{$res.ID}})"> Delete</a>
+            <div class="float-right">
+                <a href="#!" class="btn btn-danger" onclick="deleteRes({{$res.ID}})">Delete</a>
             </div>
-
             <div class="clearfix"></div>
         </form>
 
@@ -85,28 +88,28 @@
             attention.custom({
                 icon: 'warning',
                 msg: 'Are you sure?',
-                callback: function(result){
-                    if (result !== false){
-                        window.location.href = "/admin/process-reservation/{{$src}}/" + id;
-
+                callback: function (result) {
+                    if (result !== false) {
+                        window.location.href = "/admin/process-reservation/{{$src}}/"
+                            + id
+                            + "/do?y={{index .StringMap "year"}}&m={{index .StringMap "month"}}";
                     }
                 }
             })
         }
 
-        function deleteRes(id){
+        function deleteRes(id) {
             attention.custom({
                 icon: 'warning',
                 msg: 'Are you sure?',
-                callback: function(result){
-                    if (result !== false){
-                        window.location.href = "/admin/delete-reservation/{{$src}}/" + id;
-
+                callback: function (result) {
+                    if (result !== false) {
+                        window.location.href = "/admin/delete-reservation/{{$src}}/"
+                            + id
+                            + "/do?y={{index .StringMap "year"}}&m={{index .StringMap "month"}}";
                     }
                 }
             })
-
         }
     </script>
-
 {{end}}

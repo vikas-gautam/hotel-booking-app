@@ -12,7 +12,6 @@
   }
   &.btn-sm {
     font-size: $btn-font-size-sm;
-    padding: 1.25rem 1rem;
   }
   &.btn-lg {
     font-size: $btn-font-size-lg;
@@ -55,7 +54,7 @@
 .btn-toolbar {
   .btn-group {
     +.btn-group {
-      @extend .ms-2;
+      @extend .ml-2;
     }
   }
 }

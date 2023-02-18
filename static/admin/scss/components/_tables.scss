@@ -18,7 +18,6 @@
     vertical-align: middle;
     line-height: 1;
     white-space: nowrap;
-    padding: $table-cell-padding;
   }
   td {
     font-size: $default-font-size;
@@ -50,10 +49,4 @@
         }
       }
   }
-}
-.table > :not(:last-child) > :last-child > *, .jsgrid .jsgrid-table > :not(:last-child) > :last-child > * {
-  border-bottom-color: $border-color;
-}
-.table > :not(:first-child), .jsgrid .jsgrid-table > :not(:first-child) {
-  border-top: none;
 }

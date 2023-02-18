@@ -3,11 +3,9 @@
 {{define "content"}}
     <div class="container">
 
-
         <div class="row">
             <div class="col">
-                <img src="/static/images/marjors-suite.png"
-                     class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
+                <img src="/static/images/marjors-suite.png" class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
             </div>
         </div>
 
@@ -16,18 +14,12 @@
             <div class="col">
                 <h1 class="text-center mt-4">Major's Suite</h1>
                 <p>
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
+                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation to remember.
+                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation to remember.
+                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation to remember.
+                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation to remember.
+                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation to remember.
+                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation to remember.
                 </p>
             </div>
         </div>
@@ -43,47 +35,49 @@
         </div>
 
 
-
-
     </div>
 {{end}}
 
-{{define "js"}}
-    <script>
-        document.getElementById("check-availability-button").addEventListener("click", function () {
-            let html = `
-        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
-            <div class="form-row">
-                <div class="col">
-                    <div class="form-row" id="reservation-dates-modal">
-                        <div class="col">
-                            <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
-                        </div>
-                        <div class="col">
-                            <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
-                        </div>
 
-                    </div>
+{{define "js"}}
+<script>
+    document.getElementById("check-availability-button").addEventListener("click", function () {
+        let html = `
+<form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+    <div class="form-row">
+        <div class="col">
+            <div class="form-row" id="reservation-dates-modal">
+                <div class="col">
+                    <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                </div>
+                <div class="col">
+                    <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
                 </div>
             </div>
-        </form>
-        `;
-            attention.custom({
-                title: 'Choose your dates',
-                msg: html,
-                willOpen: () => {
-                const elem = document.getElementById("reservation-dates-modal");
+        </div>
+    </div>
+</form>
+`
+        attention.custom({
+            msg: html,
+            title: "Choose your dates",
+
+            willOpen: () => {
+                const elem = document.getElementById('reservation-dates-modal');
                 const rp = new DateRangePicker(elem, {
                     format: 'yyyy-mm-dd',
                     showOnFocus: true,
                     minDate: new Date(),
                 })
             },
+
             didOpen: () => {
-                document.getElementById("start").removeAttribute("disabled");
-                document.getElementById("end").removeAttribute("disabled");
+                document.getElementById('start').removeAttribute('disabled');
+                document.getElementById('end').removeAttribute('disabled');
+
             },
-            callback: function(result) {
+
+            callback: function (result) {
                 console.log("called");
 
                 let form = document.getElementById("check-availability-form");
@@ -97,11 +91,11 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        if (data.ok){
+                        if (data.ok) {
                             attention.custom({
+                                icon: 'success',
                                 showConfirmButton: false,
-                                icon: "success",
-                                msg: '<p>Room is available</p>'
+                                msg: '<p>Room is available!</p>'
                                     + '<p><a href="/book-room?id='
                                     + data.room_id
                                     + '&s='
@@ -111,17 +105,14 @@
                                     + '" class="btn btn-primary">'
                                     + 'Book now!</a></p>',
                             })
-                        }
-                        else {
+                        } else {
                             attention.error({
                                 msg: "No availability",
                             })
                         }
                     })
             }
-
-
-            });
-        })
-    </script>
+        });
+    })
+</script>
 {{end}}
